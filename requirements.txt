@@ -1,0 +1,3 @@
+tqdm
+pytz
+notion==0.0.27
