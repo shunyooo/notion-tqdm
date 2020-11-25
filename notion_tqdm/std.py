@@ -91,7 +91,7 @@ class notion_tqdm(tqdm):
         cls.common_props = kwargs
         missing_columns = set(kwargs) - cls._get_table_schema_prop_names()
         if len(missing_columns) > 0:
-            logging.danger(
+            logging.error(
                 f"There are missing columns in the table: {missing_columns}."
             )
 
