@@ -55,16 +55,38 @@ A row representing the progress should be added to the table as shown below.
 
 
 
-### Example: Running with the existing tqdm
+### Example: Running with the Other tqdm
 
 ```python
-from tqdm.auto import tqdm
+from tqdm.auto import tqdm as tqdm_auto
 from time import sleep
 # Nest tqdm
-extqdm = lambda *args, **kwags: tqdm(notion_tqdm(*args, **kwags))
-for i in extqdm(range(100)):
+tqdm = lambda *args, **kwags: tqdm_auto(notion_tqdm(*args, **kwags))
+for i in tqdm(range(100)):
   sleep(1)
   print(i)
+```
+
+
+
+### Example: Set Custom Property
+
+#### Set the common parameters before the iterative process.
+
+```python
+# Since this setting, it will be added to the row as the default value.
+notion_tqdm.set_common_props(machine='Jupyter1')
+```
+
+#### Set the dynamic parameters during the iterative process.
+
+```python
+with notion_tqdm(range(50), desc='process') as pbar:
+    for i in pbar:
+        # ... some process ...
+        # The precision, highparam column must be 
+        # added to the table beforehand.
+        pbar.update_props(precision=precision, highparam=highparam)
 ```
 
 
