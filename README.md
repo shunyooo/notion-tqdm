@@ -34,11 +34,10 @@ pip install notion-tqdm
 from notion_tqdm import notion_tqdm
 from time import sleep
 
+# Configure
 token_v2 = '<token_v2>'
 table_url = '<table_url>'
 notion_email = '<notion_email>' # For multi-account users
-
-from notion_tqdm import notion_tqdm
 notion_tqdm.set_config(token_v2, table_url, email=notion_email, timezone='Asia/Tokyo')
 
 # Run Iterate
