@@ -52,9 +52,21 @@ A row representing the progress should be added to the table as shown below.
 
 
 
-# Tips
+### Example: Running with the existing tqdm
 
-### Timeline View
+```python
+from tqdm.auto import tqdm
+from time import sleep
+# Nest tqdm
+extqdm = lambda *args, **kwags: tqdm(notion_tqdm(*args, **kwags))
+for i in extqdm(range(100)):
+  sleep(1)
+  print(i)
+```
+
+
+
+### Example: Timeline View
 
 With Notion's **timeline view**, you can visualize the **execution time of the progress**.
 
