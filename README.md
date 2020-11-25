@@ -19,9 +19,9 @@ pip install notion-tqdm
 
 ## Preparation
 
-1. **Get Notion's Token** for reference [here](https://www.notion.so/How-to-get-your-token-d7a3421b851f406380fb9ff429cd5d47)
+1. **Get Notion's Token** for reference **[here](https://www.notion.so/How-to-get-your-token-d7a3421b851f406380fb9ff429cd5d47)**
 
-2.  in your own workspace and **get the table link**.
+2.  [**Duplicate this page**](https://www.notion.so/syunyo/notion-tqdm-template-7d2d53595e774c9eb7a020e00fd81fab) in your own workspace and **get the table link**.
     （Note that it is a table link, not a page link.）
 
 <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/b5abd2eb-1690-46fb-af44-3b22a3a4c559/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20201124%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20201124T201006Z&X-Amz-Expires=86400&X-Amz-Signature=7adcab42158710e0db92099c95c0c47988f13fde18efbefe1a2200a7bc04963c&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" width='500px' />
