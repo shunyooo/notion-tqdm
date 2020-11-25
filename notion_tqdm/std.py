@@ -125,7 +125,7 @@ class notion_tqdm(tqdm):
             row.update_timestamp = now
             row.timerange = NotionDate(
                 self.localize_timestamp(self.start_t),
-                self.localize_timestamp(self.last_print_t),
+                self.localize_timestamp(now),
                 timezone=notion_tqdm.timezone,
             )
             row.elapsed_sec = now - self.start_t
