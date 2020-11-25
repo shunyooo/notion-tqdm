@@ -8,36 +8,93 @@ from time import time
 import pytz
 import requests
 from IPython import get_ipython
-from tqdm import tqdm
-
 from notion.client import NotionClient
 from notion.collection import NotionDate
+from tqdm import tqdm
+from tzlocal import get_localzone
 
-from .constants import POST_INTERVAL_SEC, Status
+from .constants import (
+    POST_INTERVAL_SEC,
+    REQUIRED_COLUMNS,
+    REQUIRED_STATUS_OPTIONS,
+    Status,
+)
+
+
+def get_localzone_name():
+    local_tz = get_localzone()
+    return datetime.now(local_tz).tzname()
 
 
 class notion_tqdm(tqdm):
+    _is_configured = False
+    post_interval_sec = POST_INTERVAL_SEC
+    timezone = get_localzone_name()
+
+    @classmethod
+    def _get_table_schema_prop_names(cls):
+        return set(
+            [prop["name"] for prop in cls.table_view.collection.get_schema_properties()]
+        )
+
+    @classmethod
+    def _validate_table_shcema(cls):
+        # Check table view type
+        if "collection" not in dir(cls.table_view):
+            raise Exception(
+                f"table_view is not referring to the table correctly. Make sure you are setting a table link that is not a page link."
+            )
+        # Check required columns
+        table_view_columns = cls._get_table_schema_prop_names()
+        missing_columns = REQUIRED_COLUMNS - table_view_columns
+        if len(missing_columns) > 0:
+            raise Exception(
+                f"There are missing columns in the table: {missing_columns}. Did you duplicate this view?: https://www.notion.so/syunyo/notion-tqdm-template-7d2d53595e774c9eb7a020e00fd81fab"
+            )
+        # Check select options
+        table_status_options = set(
+            [
+                op["value"]
+                for op in cls.table_view.collection.get_schema_property("status")[
+                    "options"
+                ]
+            ]
+        )
+        missing_options = REQUIRED_STATUS_OPTIONS - table_status_options
+        if len(missing_options) > 0:
+            raise Exception(
+                f"There are missing options in the status columns: {missing_options}. Did you duplicate this view?: https://www.notion.so/syunyo/notion-tqdm-template-7d2d53595e774c9eb7a020e00fd81fab"
+            )
+
     @classmethod
     def set_config(
         cls, token_v2, table_url, email=None, timezone=None, post_interval_sec=None
     ):
-        cls.timezone = timezone
-        cls.post_interval_sec = (
-            POST_INTERVAL_SEC if post_interval_sec is None else post_interval_sec
-        )
-        cls._timezone_pytz = pytz.timezone(timezone)
+        # Common Config
+        if timezone is not None:
+            cls.timezone = timezone
+        if post_interval_sec is not None:
+            ls.post_interval_sec = post_interval_sec
+        cls._timezone_pytz = pytz.timezone(cls.timezone)
+        # Notion Config
         cls.client = NotionClient(token_v2=token_v2)
         if email is not None:
             cls.client.set_user_by_email(email)
         cls.table_view = cls.client.get_block(table_url)
-        if "collection" not in dir(cls.table_view):
-            logging.warning(f"Failed to refer to the table: {cls.table_view}")
+        # Validation
+        cls._validate_table_shcema()
+        cls._is_configured = True
 
     def localize_timestamp(self, timestamp):
         utc_datetime = datetime.fromtimestamp(timestamp, tz=timezone.utc)
         return utc_datetime.astimezone(notion_tqdm._timezone_pytz)
 
     def _update_row(self):
+        if not notion_tqdm._is_configured:
+            logging.warning(
+                "notion_tqdm does not seem to be set yet. call notion_tqdm.set_config and configure it.\nrefer to https://github.com/shunyooo/notion-tqdm#usage"
+            )
+            return
         if self._row_creating:
             return
         if self.row is None and not self._row_creating:
@@ -50,6 +107,8 @@ class notion_tqdm(tqdm):
             row.name = self.desc
             row.status = self.status
             row.value = self.n
+            row.start_timestamp = self.start_t
+            row.update_timestamp = self.last_print_t
             row.timerange = NotionDate(
                 self.localize_timestamp(self.start_t),
                 self.localize_timestamp(self.last_print_t),
