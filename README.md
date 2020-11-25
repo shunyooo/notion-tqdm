@@ -1,4 +1,7 @@
 # notion-tqdm
+
+[![PyPI version](https://badge.fury.io/py/notion-tqdm.svg)](https://badge.fury.io/py/notion-tqdm) [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
+
 Progress Bar displayed in Notion like tqdm for Python.
 
 ![demo](https://user-images.githubusercontent.com/17490886/100184781-97ae2580-2f25-11eb-9700-2d9c5ce95592.gif)
