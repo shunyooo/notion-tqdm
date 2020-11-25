@@ -30,6 +30,7 @@ class notion_tqdm(tqdm):
     _is_configured = False
     post_interval_sec = POST_INTERVAL_SEC
     timezone = get_localzone_name()
+    common_props = {}
 
     @classmethod
     def _get_table_schema_prop_names(cls):
@@ -85,6 +86,15 @@ class notion_tqdm(tqdm):
         cls._validate_table_shcema()
         cls._is_configured = True
 
+    @classmethod
+    def set_common_props(cls, **kwargs):
+        cls.common_props = kwargs
+        missing_columns = set(kwargs) - cls._get_table_schema_prop_names()
+        if len(missing_columns) > 0:
+            logging.danger(
+                f"There are missing columns in the table: {missing_columns}."
+            )
+
     def localize_timestamp(self, timestamp):
         utc_datetime = datetime.fromtimestamp(timestamp, tz=timezone.utc)
         return utc_datetime.astimezone(notion_tqdm._timezone_pytz)
@@ -101,7 +111,10 @@ class notion_tqdm(tqdm):
             self._row_creating = True
             self.row = notion_tqdm.table_view.collection.add_row()
             self._row_creating = False
+            for c, v in notion_tqdm.common_props.items():
+                self.row.set_property(c, v)
         if self.row is not None:
+            # Base props
             row = self.row
             row.total = self.total
             row.name = self.desc
@@ -115,6 +128,9 @@ class notion_tqdm(tqdm):
                 timezone=notion_tqdm.timezone,
             )
             row.elapsed_sec = self.last_print_t - self.start_t
+            # Custom props
+            for c, v in self.custom_props.items():
+                row.set_property(c, v)
 
     @property
     def _can_post(self):
@@ -134,8 +150,8 @@ class notion_tqdm(tqdm):
             self.last_post_time = time()
             self._loading = False
 
-    def display(self, msg=None, pos=None, status=None):
-        force = status is not None
+    def display(self, msg=None, pos=None, status=None, force=False):
+        force = status is not None or force
         self.status = Status.doing if status is None else status
         threading.Thread(
             name="_post_if_need", target=self._post_if_need, args=[force]
@@ -150,6 +166,7 @@ class notion_tqdm(tqdm):
         self._row_creating = False
         super().__init__(*args, **kwargs)
         self.sp = self.display
+        self.custom_props = {}
 
     def __iter__(self, *args, **kwargs):
         try:
@@ -158,6 +175,10 @@ class notion_tqdm(tqdm):
         except:
             self.display(status=Status.error)
             raise
+
+    def update_props(self, force=False, **kwags):
+        self.custom_props = kwags
+        self.display(force)
 
     def update(self, *args, **kwargs):
         try:
