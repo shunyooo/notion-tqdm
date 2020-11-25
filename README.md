@@ -74,7 +74,8 @@ for i in tqdm(range(100)):
 #### Set the common parameters before the iterative process.
 
 ```python
-# Since this setting, it will be added to the row as the default value.
+# After this setting, the value will be added to the column by default.
+# The `machine` column must be added to the table beforehand.
 notion_tqdm.set_common_props(machine='Jupyter1')
 ```
 
@@ -84,7 +85,7 @@ notion_tqdm.set_common_props(machine='Jupyter1')
 with notion_tqdm(range(50), desc='process') as pbar:
     for i in pbar:
         # ... some process ...
-        # The precision, highparam column must be 
+        # The `precision`, `highparam` column must be 
         # added to the table beforehand.
         pbar.update_props(precision=precision, highparam=highparam)
 ```
