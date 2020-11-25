@@ -7,7 +7,7 @@ with open("README.md", encoding="utf-8") as f:
 setup(
     name="notion-tqdm",
     python_requires=">=3.6",
-    version="0.0.5",
+    version="0.0.7",
     description="Progress Bar displayed in Notion like tqdm for Python",
     long_description=readme,
     long_description_content_type="text/markdown",

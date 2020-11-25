@@ -115,19 +115,20 @@ class notion_tqdm(tqdm):
                 self.row.set_property(c, v)
         if self.row is not None:
             # Base props
+            now = time()
             row = self.row
             row.total = self.total
             row.name = self.desc
             row.status = self.status
             row.value = self.n
             row.start_timestamp = self.start_t
-            row.update_timestamp = self.last_print_t
+            row.update_timestamp = now
             row.timerange = NotionDate(
                 self.localize_timestamp(self.start_t),
                 self.localize_timestamp(self.last_print_t),
                 timezone=notion_tqdm.timezone,
             )
-            row.elapsed_sec = self.last_print_t - self.start_t
+            row.elapsed_sec = now - self.start_t
             # Custom props
             for c, v in self.custom_props.items():
                 row.set_property(c, v)
