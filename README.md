@@ -27,7 +27,7 @@ pip install notion-tqdm
 2.  [**Duplicate this page**](https://www.notion.so/syunyo/notion-tqdm-template-7d2d53595e774c9eb7a020e00fd81fab) in your own workspace and **get the table link**.
     （Note that it is a table link, not a page link.）
 
-<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/b5abd2eb-1690-46fb-af44-3b22a3a4c559/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20201124%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20201124T201006Z&X-Amz-Expires=86400&X-Amz-Signature=7adcab42158710e0db92099c95c0c47988f13fde18efbefe1a2200a7bc04963c&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22" width='500px' />
+<img src="https://user-images.githubusercontent.com/17490886/100450226-9f71f380-30f8-11eb-97c5-2538d99d4a5b.png" width='500px' />
 
 
 
@@ -51,7 +51,7 @@ for i in notion_tqdm(range(100), desc='Processing'):
 
 A row representing the progress should be added to the table as shown below.
 
-![](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/8131c29a-7e55-4dd4-99df-361b409bdded/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20201124%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20201124T201623Z&X-Amz-Expires=86400&X-Amz-Signature=52bbe9c2416eb3bdc89204223d9b7b2a793b3c0f649e97a51b0bc22715870081&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22)
+![](https://user-images.githubusercontent.com/17490886/100450225-9ed95d00-30f8-11eb-8932-19c4d9a1e955.png)
 
 
 
@@ -92,9 +92,22 @@ with notion_tqdm(range(50), desc='process') as pbar:
 
 
 
+### Example: Add text to a page in table row.
+
+```python
+with notion_tqdm(range(500), desc='add text test') as pbar:
+    for i in pbar:
+        sleep(1)
+        pbar.add_text(f'text: {i}')
+```
+
+<img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gl40e5odp3j30a40cw0t6.jpg" alt="image-20201127213525339" height=400 />
+
+
+
 ### Example: Timeline View
 
 With Notion's **timeline view**, you can visualize the **execution time of the progress**.
 
-![](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/897aa5aa-7ad4-4913-9f3f-2002ebdd8603/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20201124%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20201124T202304Z&X-Amz-Expires=86400&X-Amz-Signature=1991a50ecb1fcbe2a77a576803e45ee91907336ce4a1d646f45f7e2ce38d6ea4&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22)
+![](https://user-images.githubusercontent.com/17490886/100450217-9c770300-30f8-11eb-8b8a-241fc622d700.png)
 
