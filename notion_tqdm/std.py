@@ -8,6 +8,7 @@ from time import time
 import pytz
 import requests
 from IPython import get_ipython
+from notion.block import TextBlock
 from notion.client import NotionClient
 from notion.collection import NotionDate
 from tqdm import tqdm
@@ -115,6 +116,7 @@ class notion_tqdm(tqdm):
                 self.row.set_property(c, v)
         if self.row is not None:
             # Base props
+            # TODO: Difference only updates
             now = time()
             row = self.row
             row.total = self.total
@@ -130,8 +132,13 @@ class notion_tqdm(tqdm):
             )
             row.elapsed_sec = now - self.start_t
             # Custom props
+            # TODO: Set the props that have been skipped during creating.
             for c, v in self.custom_props.items():
                 row.set_property(c, v)
+            # Add Text Blocks
+            for text in self._pending_texts:
+                self.row.children.add_new(TextBlock).title = text
+            self._pending_texts = []
 
     @property
     def _can_post(self):
@@ -168,6 +175,7 @@ class notion_tqdm(tqdm):
         super().__init__(*args, **kwargs)
         self.sp = self.display
         self.custom_props = {}
+        self._pending_texts = []
 
     def __iter__(self, *args, **kwargs):
         try:
@@ -176,6 +184,10 @@ class notion_tqdm(tqdm):
         except:
             self.display(status=Status.error)
             raise
+
+    def add_text(self, text, force=False):
+        self._pending_texts.append(text)
+        self.display(force)
 
     def update_props(self, force=False, **kwags):
         self.custom_props = kwags
