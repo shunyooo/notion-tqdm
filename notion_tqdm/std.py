@@ -7,7 +7,6 @@ from time import time
 
 import pytz
 import requests
-from IPython import get_ipython
 from notion.block import TextBlock
 from notion.client import NotionClient
 from notion.collection import NotionDate
