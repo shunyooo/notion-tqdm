@@ -161,9 +161,11 @@ class notion_tqdm(tqdm):
     def display(self, msg=None, pos=None, status=None, force=False):
         force = status is not None or force
         self.status = Status.doing if status is None else status
-        threading.Thread(
+        t = threading.Thread(
             name="_post_if_need", target=self._post_if_need, args=[force]
-        ).start()
+        )
+        t.setDaemon(True)
+        t.start()
 
     def __init__(self, *args, **kwargs):
         self.row = None
