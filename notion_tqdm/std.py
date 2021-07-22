@@ -202,7 +202,6 @@ class notion_tqdm(tqdm):
             raise
 
     def close(self, *args, **kwargs):
-        super().close(*args, **kwargs)
         if self.total and self.n < self.total:
             self.display(status=Status.error)
         else:
