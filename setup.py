@@ -7,7 +7,7 @@ with open("README.md", encoding="utf-8") as f:
 setup(
     name="notion-tqdm",
     python_requires=">=3.6",
-    version="0.1.0",
+    version="0.2.0",
     description="Progress Bar displayed in Notion like tqdm for Python",
     long_description=readme,
     long_description_content_type="text/markdown",
@@ -17,5 +17,5 @@ setup(
     license="MIT License",
     packages=["notion_tqdm/",],
     url="https://github.com/shunyooo/notion-tqdm",
-    install_requires=["tqdm", "notion==0.0.27"],
+    install_requires=["tqdm", "notion @ git+https://github.com/shunyooo/notion-py.git"],
 )
