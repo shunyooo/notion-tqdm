@@ -13,7 +13,7 @@ Progress Bar displayed in Notion like tqdm for Python using [`notion-py`](https:
 # Installation
 
 ```
-pip install notion-tqdm
+pip install git+https://github.com/shunyooo/notion-tqdm
 ```
 
 
