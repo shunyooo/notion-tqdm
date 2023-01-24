@@ -75,7 +75,7 @@ class notion_tqdm(tqdm):
         if timezone is not None:
             cls.timezone = timezone
         if post_interval_sec is not None:
-            ls.post_interval_sec = post_interval_sec
+            cls.post_interval_sec = post_interval_sec
         cls._timezone_pytz = pytz.timezone(cls.timezone)
         # Notion Config
         cls.client = NotionClient(token_v2=token_v2)
