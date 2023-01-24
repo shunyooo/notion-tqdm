@@ -25,5 +25,9 @@ jobs:
         python -m pip install pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Test with pytest
+      env: 
+          TOKEN_V2: ${{ secrets.TOKEN_V2 }}
+          TABLE_URL: ${{ secrets.TABLE_URL }}
+          NOTION_EMAIL: ${{ secrets.NOTION_EMAIL }}
       run: |
-        pytest -sv --token_v2 ${{ secrets.TOKEN_V2 }} --table_url ${{ secrets.TABLE_URL }} --notion_email ${{ secrets.NOTION_EMAIL }}
+        pytest -sv --token_v2 "$TOKEN_V2" --table_url "$TABLE_URL" --notion_email "$NOTION_EMAIL"
